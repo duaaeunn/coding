@@ -1,4 +1,6 @@
 import streamlit as st
 st.header('Hello')
-st.header('안녕~! 혜림!!')
-st.write('반가워요 혜림!')
+
+isClicked=st.button('버튼')
+if isClicked :
+  st.write('웅 마장')
