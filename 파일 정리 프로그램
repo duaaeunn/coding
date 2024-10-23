@@ -1,0 +1,45 @@
+import os
+import shutil
+
+def organize_files(folder_path):
+    # 파일 유형에 따라 분류할 사전
+    file_types = {
+        'Images': ['.jpg', '.jpeg', '.png', '.gif'],
+        'Documents': ['.pdf', '.doc', '.docx', '.txt'],
+        'Videos': ['.mp4', '.mov', '.avi'],
+        'Music': ['.mp3', '.wav'],
+        'Archives': ['.zip', '.tar', '.gz'],
+        'Others': []
+    }
+
+    # 지정한 폴더 내 파일 목록 가져오기
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        
+        # 파일인지 확인
+        if os.path.isfile(file_path):
+            # 파일 확장자 가져오기
+            file_extension = os.path.splitext(filename)[1].lower()
+            moved = False
+            
+            # 유형에 따라 폴더로 이동
+            for folder_name, extensions in file_types.items():
+                if file_extension in extensions:
+                    target_folder = os.path.join(folder_path, folder_name)
+                    if not os.path.exists(target_folder):
+                        os.makedirs(target_folder)  # 폴더가 없으면 생성
+                    shutil.move(file_path, os.path.join(target_folder, filename))
+                    moved = True
+                    break
+            
+            # 기타 파일 처리
+            if not moved:
+                target_folder = os.path.join(folder_path, 'Others')
+                if not os.path.exists(target_folder):
+                    os.makedirs(target_folder)  # 폴더가 없으면 생성
+                shutil.move(file_path, os.path.join(target_folder, filename))
+
+if __name__ == "__main__":
+    folder_path = input("정리할 폴더의 경로를 입력하세요: ")
+    organize_files(folder_path)
+    print("파일 정리가 완료되었습니다!")
